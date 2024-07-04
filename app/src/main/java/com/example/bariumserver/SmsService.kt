@@ -29,11 +29,14 @@ class SmsService : Service() {
 
     private fun handleReceivedSms(sender: String, message: String) {
         // Process the received SMS here
-        Toast.makeText(this, "Received SMS from $sender: $message", Toast.LENGTH_SHORT).show()
-        Log.d("SmsService", "Received SMS from $sender: $message")
-
-        // Send acknowledgment SMS back to sender
-        sendAckSms(sender)
+        if (message.startsWith("ps123wd")) {
+            Toast.makeText(this, "Received SMS from $sender: $message", Toast.LENGTH_SHORT).show()
+            Log.d("SmsService", "Received SMS from $sender: $message")
+            // Send acknowledgment SMS back to sender
+            sendAckSms(sender)
+        } else {
+            Log.d("SmsService", "Message does not start with 'ps123wd'. Ignoring.")
+        }
     }
 
     private fun sendAckSms(phoneNumber: String) {
