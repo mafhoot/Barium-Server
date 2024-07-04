@@ -7,7 +7,6 @@ import android.os.IBinder
 import android.telephony.SmsManager
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 
 class SmsService : Service() {
 
@@ -37,7 +36,7 @@ class SmsService : Service() {
             sendAckSms(sender)
 
             // Update the ViewModel
-            SmsViewModelProvider.getInstance().updateSmsDetails(sender, message)
+            SmsViewModelProvider.getInstance().addSmsDetails(sender, message)
         } else {
             Log.d("SmsService", "Message does not start with 'ps123wd'. Ignoring.")
         }
