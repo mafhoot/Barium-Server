@@ -53,7 +53,7 @@ class SmsService : Service() {
     }
 
     private fun sendAckSms(phoneNumber: String, messageId: String) {
-        val message = "Acknowledgment:\n id: $messageId"
+        val message = "Acknowledgment:\nid: $messageId"
         val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"),
             PendingIntent.FLAG_IMMUTABLE)
         SmsManager.getDefault().sendTextMessage(phoneNumber, null, message, sentPI, null)
