@@ -32,19 +32,28 @@ class SmsService : Service() {
         if (message.startsWith("ps123wd")) {
             Toast.makeText(this, "Received SMS from $sender: $message", Toast.LENGTH_SHORT).show()
             Log.d("SmsService", "Received SMS from $sender: $message")
-            // Send acknowledgment SMS back to sender
-            sendAckSms(sender)
 
-            // Update the ViewModel
-            SmsViewModelProvider.getInstance().addSmsDetails(sender, message)
+            // Extract ID from the message
+            val idRegex = "id: ([\\w-]+)".toRegex()
+            val matchResult = idRegex.find(message)
+            val messageId = matchResult?.groups?.get(1)?.value
+
+            if (messageId != null) {
+                // Send acknowledgment SMS back to sender with ID
+                sendAckSms(sender, messageId)
+
+                // Update the ViewModel
+                SmsViewModelProvider.getInstance().addSmsDetails(sender, message)
+            } else {
+                Log.d("SmsService", "Message ID not found in the message.")
+            }
         } else {
             Log.d("SmsService", "Message does not start with 'ps123wd'. Ignoring.")
         }
     }
 
-
-    private fun sendAckSms(phoneNumber: String) {
-        val message = "Acknowledgment: Your message was received."
+    private fun sendAckSms(phoneNumber: String, messageId: String) {
+        val message = "Acknowledgment:\n id: $messageId"
         val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"),
             PendingIntent.FLAG_IMMUTABLE)
         SmsManager.getDefault().sendTextMessage(phoneNumber, null, message, sentPI, null)
