@@ -42,6 +42,7 @@ class SmsService : Service() {
         }
     }
 
+
     private fun sendAckSms(phoneNumber: String) {
         val message = "Acknowledgment: Your message was received."
         val sentPI: PendingIntent = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"),
